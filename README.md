@@ -21,7 +21,7 @@ There is two files that we need to modify Qemu.pm and Cloudinit.pm.
 ## Install Proxmox patch
 
 We have provided patch file for two different versions, if you are on those versions you can simply download it and apply the patch by doing;
-```
+```bash
 # Check the version of your qemu-server
 apt show qemu-server |grep "Version"
 
@@ -30,11 +30,18 @@ apt show qemu-server |grep "Version"
 # Launch below as a test to see if you can apply the patch file, change path to where you downloaded the files and run this for two .patch files.
 patch --force --forward --backup -p0 --directory / --input "/absolute/path/to/patchfile.pm.patch" --dry-run && echo "You can apply patch" || { echo "Can't apply patch!";}
 
+# example
+patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Cloudinit.pm.patch" --dry-run && echo "You can apply patch" || { echo "Can't apply patch!";}
+patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Qemu.pm.patch" --dry-run && echo "You can apply patch" || { echo "Can't apply patch!";}
+
 # If the result is "Can't apply patch!", you can type "apt reinstall qemu-server" to reinstall the qemu-server files(If you have made changes to qemu-server source files they will be lost!)
 
 # Apply the patch if the result is "You can apply patch"
 patch --force --forward --backup -p0 --directory / --input "/absolute/path/to/patchfile.pm.patch"
 
+# example
+patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Cloudinit.pm.patch"
+patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Qemu.pm.patch"
 ```
 
 If you want to revert the patch:
