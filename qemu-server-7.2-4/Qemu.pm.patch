@@ -1,0 +1,20 @@
+--- /usr/share/perl5/PVE/API2/Qemu.pm.orig	2022-08-16 19:59:20.000000000 +0800
++++ /usr/share/perl5/PVE/API2/Qemu.pm	2022-09-08 09:50:18.798901667 +0800
+@@ -1316,10 +1316,15 @@ my $update_vm_api  = sub {
+ 
+     my $background_delay = extract_param($param, 'background_delay');
+ 
++    my $conf = PVE::QemuConfig->load_config($vmid);
++    my $ostype = $conf->{ostype};
++
+     if (defined(my $cipassword = $param->{cipassword})) {
+ 	# Same logic as in cloud-init (but with the regex fixed...)
+-	$param->{cipassword} = PVE::Tools::encrypt_pw($cipassword)
+-	    if $cipassword !~ /^\$(?:[156]|2[ay])(\$.+){2}/;
++        if (!(PVE::QemuServer::windows_version($ostype))) { # new if block for support windowsand insert old code inside it
++	    $param->{cipassword} = PVE::Tools::encrypt_pw($cipassword)
++	        if $cipassword !~ /^\$(?:[156]|2[ay])(\$.+){2}/;
++        }
+     }
+ 
+     my @paramarr = (); # used for log message
