@@ -31,8 +31,8 @@ apt show qemu-server |grep "Version"
 patch --force --forward --backup -p0 --directory / --input "/absolute/path/to/patchfile.pm.patch" --dry-run && echo "You can apply patch" || { echo "Can't apply patch!";}
 
 # example
-patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Cloudinit.pm.patch" --dry-run && echo "You can apply patch" || { echo "Can't apply patch!";}
-patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Qemu.pm.patch" --dry-run && echo "You can apply patch" || { echo "Can't apply patch!";}
+echo "patch --force --forward --backup -p0 --directory / --input \"/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Cloudinit.pm.patch\" --dry-run && echo \"You can apply patch\" || { echo \"Can't apply patch\"; }" | bash
+echo "patch --force --forward --backup -p0 --directory / --input \"/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Qemu.pm.patch\" --dry-run && echo \"You can apply patch\" || { echo \"Can't apply patch\"; }" | bash
 
 # If the result is "Can't apply patch!", you can type "apt reinstall qemu-server" to reinstall the qemu-server files(If you have made changes to qemu-server source files they will be lost!)
 
