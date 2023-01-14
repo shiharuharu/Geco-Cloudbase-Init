@@ -23,7 +23,11 @@ There is two files that we need to modify Qemu.pm and Cloudinit.pm.
 We have provided patch file for two different versions, if you are on those versions you can simply download it and apply the patch by doing;
 ```bash
 # Check the version of your qemu-server
-apt show qemu-server |grep "Version"
+apt show qemu-server | grep "Version"
+
+# backup 
+cp /usr/share/perl5/PVE/QemuServer/Cloudinit.pm /usr/share/perl5/PVE/QemuServer/Cloudinit.pm.orig
+cp /usr/share/perl5/PVE/API2/Qemu.pm /usr/share/perl5/PVE/API2/Qemu.pm.orig
 
 # If your version is 6.4-2 or 7.1-4 download the corresponding patch from this repo and continue, if not continue manual patching below.
 
@@ -40,8 +44,8 @@ echo "patch --force --forward --backup -p0 --directory / --input \"/root/Geco-Cl
 patch --force --forward --backup -p0 --directory / --input "/absolute/path/to/patchfile.pm.patch"
 
 # example
-patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Cloudinit.pm.patch"
-patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.2-4/Qemu.pm.patch"
+patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.3-2/Cloudinit.pm.patch"
+patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.3-2/Qemu.pm.patch"
 ```
 
 If you want to revert the patch:
