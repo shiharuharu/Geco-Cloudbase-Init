@@ -1,7 +1,7 @@
 package PVE::QemuServer::Cloudinit;
 
-use strict;
-use warnings;
+# use strict;
+# use warnings;
 
 use File::Path;
 use Digest::SHA;
@@ -87,6 +87,8 @@ sub get_hostname_fqdn {
 	$hostname =~ s/\..*$//;
     } elsif (my $search = $conf->{searchdomain}) {
 	$fqdn = "$hostname.$search";
+    } else {
+	$fqdn = $hostname;
     }
     return ($hostname, $fqdn);
 }
@@ -120,7 +122,7 @@ sub cloudinit_userdata {
 
     $content .= "hostname: $hostname\n";
     $content .= "manage_etc_hosts: true\n";
-    $content .= "fqdn: $fqdn\n" if defined($fqdn);
+    $content .= "fqdn: $fqdn\n";
 
     my $username = $conf->{ciuser};
     my $password = $conf->{cipassword};
@@ -146,7 +148,7 @@ sub cloudinit_userdata {
 	$content .= "  - default\n";
     }
 
-    $content .= "package_upgrade: true\n";
+    $content .= "package_upgrade: true\n" if !defined($conf->{ciupgrade}) || $conf->{ciupgrade};
 
     return $content;
 }
@@ -173,12 +175,12 @@ sub configdrive2_network {
     if ($nameservers && @$nameservers) {
 	$nameservers = join(' ', @$nameservers);
 	$content .= "        dns_nameservers $nameservers\n";
-        $default_dns = $nameservers; # Support windows
+    $default_dns = $nameservers; # Support windows
     }
     if ($searchdomains && @$searchdomains) {
 	$searchdomains = join(' ', @$searchdomains);
 	$content .= "        dns_search $searchdomains\n";
-        $default_search = $searchdomains; # Support windows
+    $default_search = $searchdomains; # Support windows
     }
 
     my @ifaces = grep { /^net(\d+)$/ } keys %$conf;
@@ -198,12 +200,12 @@ sub configdrive2_network {
 		$content .= "        address $addr\n";
 		$content .= "        netmask $mask\n";
 		$content .= "        gateway $net->{gw}\n" if $net->{gw};
-                ## Support Windows
-                if(PVE::QemuServer::Helpers::windows_version($ostype) && ($id eq "eth0")) {
-                    $content .= "        dns-nameservers $default_dns\n";
-                    $content .= "        dns-search $default_search\n";
-                }
-                ##
+        ## Support Windows
+        if(PVE::QemuServer::Helpers::windows_version($ostype) && ($id eq "eth0")) {
+            $content .= "        dns-nameservers $default_dns\n";
+            $content .= "        dns-search $default_search\n";
+        }
+        ##
 	    }
 	}
 	if ($net->{ip6}) {
@@ -255,6 +257,7 @@ sub get_mac_addresses {
     }
     return ($dhcpstring);
 }
+
 sub configdrive2_gen_metadata {
     my ($conf, $vmid, $user, $network) = @_;
 
