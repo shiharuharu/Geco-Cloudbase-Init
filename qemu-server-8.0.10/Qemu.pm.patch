@@ -1,0 +1,21 @@
+--- /usr/share/perl5/PVE/API2/Qemu.pm.origin	2024-01-18 15:54:47.453301648 +0800
++++ /usr/share/perl5/PVE/API2/Qemu.pm	2024-01-18 16:02:02.043514760 +0800
+@@ -1547,10 +1547,15 @@ my $update_vm_api  = sub {
+ 
+     my $skip_cloud_init = extract_param($param, 'skip_cloud_init');
+ 
++    my $conf = PVE::QemuConfig->load_config($vmid);
++    my $ostype = $conf->{ostype};
+     if (defined(my $cipassword = $param->{cipassword})) {
+-	# Same logic as in cloud-init (but with the regex fixed...)
+-	$param->{cipassword} = PVE::Tools::encrypt_pw($cipassword)
+-	    if $cipassword !~ /^\$(?:[156]|2[ay])(\$.+){2}/;
++		# new if block for support windowsand insert old code inside it
++		if (!(PVE::QemuServer::Helpers::windows_version($conf->{ostype}))) {
++			# Same logic as in cloud-init (but with the regex fixed...)
++			$param->{cipassword} = PVE::Tools::encrypt_pw($cipassword)
++				if $cipassword !~ /^\$(?:[156]|2[ay])(\$.+){2}/;
++		}
+     }
+ 
+     my @paramarr = (); # used for log message

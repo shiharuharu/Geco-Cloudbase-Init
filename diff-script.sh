@@ -1,0 +1,2 @@
+diff -up /usr/share/perl5/PVE/QemuServer/Cloudinit.pm.origin /usr/share/perl5/PVE/QemuServer/Cloudinit.pm > Cloudinit.pm.patch
+diff -up /usr/share/perl5/PVE/API2/Qemu.pm.origin /usr/share/perl5/PVE/API2/Qemu.pm > Qemu.pm.patch
