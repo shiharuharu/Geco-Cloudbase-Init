@@ -1,0 +1,19 @@
+--- /usr/share/perl5/PVE/QemuServer/Cloudinit.pm.origin	2024-09-20 19:23:47.665889073 +0800
++++ /usr/share/perl5/PVE/QemuServer/Cloudinit.pm	2024-09-20 19:24:53.274790141 +0800
+@@ -316,12 +316,15 @@ sub cloudbase_network_eni {
+ sub cloudbase_configdrive2_metadata {
+     my ($uuid, $conf) = @_;
+     my $meta_data = {
++	meta => {},
+ 	uuid => $uuid,
++	'hostname' => $conf->{name},
+ 	'network_config' => {
+ 	    'content_path' => '/content/0000',
+ 	},
+     };
+-    $meta_data->{'admin_pass'} = $conf->{cipassword} if $conf->{cipassword};
++    $meta_data->{'meta'}->{'admin_pass'} = $conf->{cipassword} if $conf->{cipassword};
++    $meta_data->{'meta'}->{'admin_username'} = $conf->{ciuser} if $conf->{ciuser};
+     if (defined(my $keys = $conf->{sshkeys})) {
+ 	$keys = URI::Escape::uri_unescape($keys);
+ 	$keys = [map { my $key = $_; chomp $key; $key } split(/\n/, $keys)];
