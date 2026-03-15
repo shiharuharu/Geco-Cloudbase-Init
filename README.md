@@ -44,8 +44,8 @@ echo "patch --force --forward --backup -p0 --directory / --input \"/root/Geco-Cl
 patch --force --forward --backup -p0 --directory / --input "/absolute/path/to/patchfile.pm.patch"
 
 # example
-patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.3-2/Cloudinit.pm.patch"
-patch --force --forward --backup -p0 --directory / --input "/root/Geco-Cloudbase-Init/qemu-server-7.3-2/Qemu.pm.patch"
+patch --force --forward --backup -p0 --directory / --input "/root/Cloudinit.pm.patch"
+patch --force --forward --backup -p0 --directory / --input "/root/Qemu.pm.patch"
 ```
 
 If you want to revert the patch:
